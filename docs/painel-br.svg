@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="330" viewBox="0 0 940 330" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="13">
+  <rect x="0" y="0" width="940" height="330" rx="10" fill="#0c0c0c"/>
+  <text x="20" y="34" fill="#5a5a5a">// durante a busca — painel fixo, redesenhado no mesmo lugar</text>
+  <text x="20" y="60"><tspan fill="#777">════════════════════════</tspan><tspan fill="#e0c020"> RESOLVENDO PUZZLE #70 - range 69 bits </tspan><tspan fill="#777">════════════════════════</tspan></text>
+  <text x="20" y="82" fill="#d8d8d8">  Progresso <tspan fill="#ffffff">~62.4%</tspan> do esperado   <tspan fill="#555">·</tspan>   ops 2^34.5 / 2^35.2</text>
+  <text x="20" y="104">  Busca:   [<tspan fill="#2ecc55">████████████████████████████████████</tspan><tspan fill="#3a3a3a">······························</tspan>]</text>
+  <text x="20" y="126" fill="#777">════════════════════════════════════════════════════════════════════════════════════════</text>
+  <text x="20" y="148" fill="#d8d8d8"> [<tspan fill="#55a8ff">SOTA</tspan>] 54 MKeys/s <tspan fill="#555">|</tspan> Saltos: 24.1 bi <tspan fill="#555">|</tspan> DPs: 61K/120K <tspan fill="#555">|</tspan> Err: 0 <tspan fill="#555">|</tspan> <tspan fill="#2ecc55">58°C</tspan> 1905 MHz Fan N/A <tspan fill="#555">|</tspan> 0d 00:01:12</text>
+
+  <text x="20" y="194" fill="#5a5a5a">// ao encontrar — resumo em numeros decimais (igual ao modo loteria)</text>
+  <text x="20" y="220"><tspan fill="#2ecc55">✔ CHAVE ENCONTRADA</tspan></text>
+  <text x="20" y="242"><tspan fill="#2ecc55">CHAVE PRIVADA: 0000000000000000000000000000000000000000000000349B84B6431A6C4EF1</tspan></text>
+  <text x="20" y="266" fill="#d8d8d8">Resolvido em <tspan fill="#fff">1 busca</tspan>  <tspan fill="#555">·</tspan>  <tspan fill="#fff">42.270.720.000</tspan> chaves avaliadas (saltos)  <tspan fill="#555">·</tspan>  K <tspan fill="#fff">1.74</tspan>  <tspan fill="#555">·</tspan>  0d 00:00:29</text>
+  <text x="20" y="288" fill="#d8d8d8">Distancia percorrida pelos cangurus: ~<tspan fill="#55a8ff">12.324.100.000.000.000.000.000</tspan> chaves  <tspan fill="#666">(~2^73 · 12 sextilhoes)</tspan></text>
+  <text x="20" y="314"><tspan fill="#2ecc55">✔ Resultado salvo em:</tspan><tspan fill="#d8d8d8"> /home/user/RCKangaroo/RESULTS.TXT</tspan></text>
+</svg>

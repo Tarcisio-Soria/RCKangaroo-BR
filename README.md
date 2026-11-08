@@ -6,6 +6,8 @@ Versão brasileira (PT-BR) do **RCKangaroo**, um solver de ECDLP para a curva se
 - **Licença:** GPLv3 (software livre e de código aberto)
 - **Fork BR por:** Tarcisio Soria (a.k.a **KKND**)
 
+![Painel colorido do RCKangaroo BR](docs/painel-br.svg)
+
 > ⚠️ **Projeto acadêmico.** Este fork foi desenvolvido como prova de conceito para um **TCC (Trabalho de Conclusão de Curso)**, com fins educacionais e de pesquisa. Resolver chaves fora dos desafios públicos (puzzles) é computacionalmente inviável — o objetivo aqui é demonstrar o método, a implementação em GPU e a telemetria.
 
 ---

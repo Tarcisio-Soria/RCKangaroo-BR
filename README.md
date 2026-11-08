@@ -1,80 +1,97 @@
-(c) 2024, RetiredCoder (RC)
+# RCKangaroo BR
 
-RCKangaroo is free and open-source (GPLv3).
-This software demonstrates efficient GPU implementation of SOTA Kangaroo method for solving ECDLP. 
-It's part #3 of my research, you can find more details here: https://github.com/RetiredC
+Versão brasileira (PT-BR) do **RCKangaroo**, um solver de ECDLP para a curva secp256k1 usando o método **SOTA Kangaroo** (Pollard) com aceleração em GPU.
 
-Discussion thread: https://bitcointalk.org/index.php?topic=5517607
+- **Base:** [RCKangaroo](https://github.com/RetiredC/RCKangaroo) — © 2024 **RetiredCoder (RC)**
+- **Licença:** GPLv3 (software livre e de código aberto)
+- **Fork BR por:** Tarcisio Soria (a.k.a **KKND**)
 
-<b>Features:</b>
+> ⚠️ **Projeto acadêmico.** Este fork foi desenvolvido como prova de conceito para um **TCC (Trabalho de Conclusão de Curso)**, com fins educacionais e de pesquisa. Resolver chaves fora dos desafios públicos (puzzles) é computacionalmente inviável — o objetivo aqui é demonstrar o método, a implementação em GPU e a telemetria.
 
-- Lowest K=1.15, it means 1.8 times less required operations compared to classic method with K=2.1, also it means that you need 1.8 times less memory to store DPs.
-- Fast, about 8GKeys/s on RTX 4090, 4GKeys/s on RTX 3090.
-- Keeps DP overhead as small as possible.
-- Supports ranges up to 170 bits.
-- Both Windows and Linux are supported.
+---
 
-<b>Limitations:</b>
+## O que esta versão BR adiciona
 
-- No advanced features like networking, saving/loading DPs, etc.
+Tudo do original, **traduzido para português**, mais:
 
-<b>Command line parameters:</b>
+- 🇧🇷 **Interface 100% em PT-BR** (banner, configuração, estatísticas e mensagens).
+- 🎲 **Modo loteria** (`-rnd`): sorteia janelas aleatórias dentro do range e tenta resolver cada uma — útil para demonstrar a abordagem probabilística.
+- 🧩 **Tabela de puzzles embutida** (`-puzzle N`): chaves públicas conhecidas dos puzzles Bitcoin (#50 a #160), verificadas na blockchain. Carrega range, início e pubkey automaticamente.
+- 📊 **Painel ao vivo** fixo (redesenhado no lugar): régua + barra de progresso + telemetria da GPU (temperatura, clock, fan) com cores que respeitam o limite de throttle da própria GPU.
+- 📈 **Resumo final em números decimais completos** (saltos avaliados, fator K, tempo e distância percorrida estimada), com escala em português (milhões, bilhões, … sextilhões).
+- 💾 **`RESULTS.TXT` detalhado**: bloco completo por achado (com data/hora), incluindo chave pública comprimida, chave privada em hex (64 díg.), hex curto e **decimal**, além das estatísticas da busca. Mostra na tela o **caminho absoluto** onde salvou.
+- 🛠️ **Makefile otimizado para Ampere** (RTX 30xx, `sm_86`), compilação nativa em Linux/WSL2 com CUDA.
 
-<b>-gpu</b>		which GPUs are used, for example, "035" means that GPUs #0, #3 and #5 are used. If not specified, all available GPUs are used. 
+---
 
-<b>-pubkey</b>		public key to solve, both compressed and uncompressed keys are supported. If not specified, software starts in benchmark mode and solves random keys. 
+## Parâmetros de linha de comando
 
-<b>-start</b>		start offset of the key, in hex. Mandatory if "-pubkey" option is specified. For example, for puzzle #85 start offset is "1000000000000000000000". 
+### Novos nesta versão BR
+| Opção | Descrição |
+|---|---|
+| `-rnd` | Ativa o **modo loteria** (sorteio de janelas aleatórias). Requer `-max` para desistir de uma janela errada e sortear outra. |
+| `-wbits N` | Tamanho da janela em bits no modo loteria (mínimo 70). Deve ser **menor** que o range. |
+| `-puzzle N` | Carrega o puzzle Bitcoin #N da tabela embutida (range, início e pubkey). Puzzles #50 a #160. |
+| `-no-clear` | Não limpa a tela ao iniciar. |
 
-<b>-range</b>		bit range of private the key. Mandatory if "-pubkey" option is specified. For example, for puzzle #85 bit range is "84" (84 bits). Must be in range 32...170. 
+### Originais
+| Opção | Descrição |
+|---|---|
+| `-gpu` | Quais GPUs usar (ex.: `035` = GPUs #0, #3 e #5). Padrão: todas. |
+| `-pubkey` | Chave pública a resolver (comprimida ou não). Sem ela, roda em modo benchmark. |
+| `-start` | Offset inicial da chave, em hex. Obrigatório com `-pubkey`. |
+| `-range` | Range da chave privada em bits (32…170). Obrigatório com `-pubkey`. |
+| `-dp` | Bits de DP (14…60). Valores menores = DB maior, menos overhead. |
+| `-max` | Limita o número de operações (ex.: `5.5` = 5.5·1.15·√range). |
+| `-tames` | Arquivo de tames (gera com `-max` se não existir; carrega para acelerar). |
 
-<b>-dp</b>		DP bits. Must be in range 14...60. Low DP bits values cause larger DB but reduces DP overhead and vice versa. 
+---
 
-<b>-max</b>		option to limit max number of operations. For example, value 5.5 limits number of operations to 5.5 * 1.15 * sqrt(range), software stops when the limit is reached. 
+## Compilação (Linux / WSL2)
 
-<b>-tames</b>		filename with tames. If file not found, software generates tames (option "-max" is required) and saves them to the file. If the file is found, software loads tames to speedup solving. 
+Requer CUDA (testado com CUDA 12.4) e uma GPU NVIDIA. O `Makefile` já está configurado para **Ampere (`sm_86`)**:
 
-When public key is solved, software displays it and also writes it to "RESULTS.TXT" file. 
+```bash
+make
+```
 
-Sample command line for puzzle #85:
+Para outras arquiteturas, ajuste `-gencode=arch=compute_XX,code=sm_XX` no `Makefile`.
 
-RCKangaroo.exe -dp 16 -range 84 -start 1000000000000000000000 -pubkey 0329c4574a4fd8c810b7e42a4b398882b381bcd85e40c6883712912d167c83e73a
+---
 
-Sample command to generate tames:
+## Exemplos
 
-RCKangaroo.exe -dp 16 -range 76 -tames tames76.dat -max 10
+Resolver um puzzle direto (usa a tabela embutida):
 
-Then you can restart software with same parameters to see less K in benchmark mode or add "-tames tames76.dat" to solve some public key in 76-bit range faster.
+```bash
+./rckangaroo -puzzle 70
+```
 
-<b>Some notes:</b>
+Modo loteria (lembre do `-max`):
 
-Fastest ECDLP solvers will always use SOTA/SOTA+ method, as it's 1.4/1.5 times faster and requires less memory for DPs compared to the best 3-way kangaroos with K=1.6. 
-Even if you already have a faster implementation of kangaroo jumps, incorporating SOTA method will improve it further. 
-While adding the necessary loop-handling code will cause you to lose about 5–15% of your current speed, the SOTA method itself will provide a 40% performance increase. 
-Overall, this translates to roughly a 25% net improvement, which should not be ignored if your goal is to build a truly fast solver. 
+```bash
+./rckangaroo -puzzle 75 -rnd -wbits 73 -max 3
+```
 
+Resolver uma chave pública arbitrária (modo original):
 
-<b>Changelog:</b>
+```bash
+./rckangaroo -dp 16 -range 84 -start 1000000000000000000000 -pubkey 0329c4574a4fd8c810b7e42a4b398882b381bcd85e40c6883712912d167c83e73a
+```
 
-v3.1:
+> **Dica (GPU única):** rode apenas **um** `rckangaroo` por vez. Dois processos na mesma GPU disputam os recursos e a velocidade cai a zero.
 
-- fixed "gpu illegal memory access" bug.
-- some small improvements.
+---
 
-v3.0:
+## Sobre o método (SOTA Kangaroo)
 
-- added "-tames" and "-max" options.
-- fixed some bugs.
+O método SOTA atinge **K = 1.15**, o que significa ~1.8× menos operações (e memória para DPs) que o método clássico (K ≈ 2.1). Complexidade O(√n) contra O(n) da força bruta. Para detalhes técnicos e a pesquisa original, veja o [repositório do RetiredCoder](https://github.com/RetiredC) e a [thread de discussão](https://bitcointalk.org/index.php?topic=5517607).
 
-v2.0:
+---
 
-- added support for 30xx, 20xx and 1xxx cards.
-- some minor changes.
+## Créditos e licença
 
-v1.1:
+- Método, engine CUDA e implementação original: **RetiredCoder (RC)** — https://github.com/RetiredC/RCKangaroo
+- Tradução PT-BR, modo loteria, tabela de puzzles, painel/telemetria e melhorias de saída: **Tarcisio Soria (KKND)**
 
-- added ability to start software on 30xx cards.
-
-v1.0:
-
-- initial release.
+Este software é distribuído sob a **GPLv3** (veja [`LICENSE.TXT`](LICENSE.TXT)). Por ser um derivado, este fork permanece GPLv3 e mantém os créditos ao autor original.

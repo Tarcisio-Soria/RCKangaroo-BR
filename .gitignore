@@ -1,0 +1,11 @@
+# Artefatos de build
+*.o
+rckangaroo
+rckangaroo.exe
+
+# Saida do solver
+RESULTS.TXT
+*.dat
+
+# Diversos
+*.log

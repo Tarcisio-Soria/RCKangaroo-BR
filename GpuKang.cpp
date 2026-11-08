@@ -10,6 +10,8 @@
 
 #include "GpuKang.h"
 
+extern bool gQuiet; //silencia logs no modo loteria (definido em RCKangaroo.cpp)
+
 cudaError_t cuSetGpuParams(TKparams Kparams, u64* _jmp2_table);
 void CallGpuKernelGen(TKparams Kparams);
 void CallGpuKernelABC(TKparams Kparams);
@@ -251,7 +253,7 @@ bool RCGpuKang::Prepare(EcPoint _PntToSolve, int _Range, int _DP, EcJMP* _EcJump
 	}
 	free(buf);
 
-	printf("GPU %d: allocated %llu MB, %d kangaroos. OldGpuMode: %s\r\n", CudaIndex, total_mem / (1024 * 1024), KangCnt, IsOldGpu ? "Yes" : "No");
+	if (!gQuiet) printf("GPU %d: alocado %llu MB, %d cangurus. ModoGpuAntiga: %s\r\n", CudaIndex, total_mem / (1024 * 1024), KangCnt, IsOldGpu ? "Sim" : "Nao");
 	return true;
 }
 
@@ -457,7 +459,7 @@ void RCGpuKang::Execute()
 		if (cnt >= MAX_DP_CNT)
 		{
 			cnt = MAX_DP_CNT;
-			printf("GPU %d, gpu DP buffer overflow, some points lost, increase DP value!\r\n", CudaIndex);
+			printf("GPU %d: overflow do buffer de DPs, pontos perdidos, aumente o valor de DP!\r\n", CudaIndex);
 		}
 		u64 pnt_cnt = (u64)KangCnt * STEP_CNT;
 
